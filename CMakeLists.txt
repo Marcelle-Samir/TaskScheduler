@@ -1,11 +1,14 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.15)
+
+project(HitachiPlugin VERSION 1.0 DESCRIPTION "Hitachi Plugin" LANGUAGES CXX)
+
 option(PACKAGE_TESTS "Build the tests" ON)
 
-project(Hitachi-plugin VERSION 1.0 DESCRIPTION "Hitachi Plugin" LANGUAGES CXX)
+add_library(project_options INTERFACE)                      
+target_compile_features(project_options INTERFACE cxx_std_17)
 
 set (CMAKE_CXX_STANDARD 17)
-
-set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_SOURCE_DIR})
+add_subdirectory(src)
 
 if(PACKAGE_TESTS)
     enable_testing()
@@ -13,5 +16,3 @@ if(PACKAGE_TESTS)
     add_subdirectory(test)
 endif()
 
-add_subdirectory(src)
-add_subdirectory(test)

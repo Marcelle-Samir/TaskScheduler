@@ -1,20 +1,11 @@
-project(HitachiPlugin)
-
-set(sources
+add_executable(${PROJECT_NAME}
+	main.cpp
     HitachiPlugin.cpp
-)
-
-set(headers
     HitachiPlugin.h
 )
 
-add_library(${PROJECT_NAME} SHARED ${headers} ${sources})
-
-target_link_libraries(${PROJECT_NAME} PRIVATE HitachiPlugin::HitachiPlugin)
-target_include_directories(${PROJECT_NAME}
-        PRIVATE HitachiPlugin::HitachiPlugin
-        PUBLIC "${CMAKE_CURRENT_BINARY_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}"
+target_include_directories(${CMAKE_PROJECT_NAME}
+        PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
         )
-Hitachi_PLUGIN(${PROJECT_NAME})
 
-install(TARGETS ${PROJECT_NAME} ${HitachiPlugin_TARGET_TYPE} DESTINATION plug-ins/${HitachiPlugin_VERSION})
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE project_options)
