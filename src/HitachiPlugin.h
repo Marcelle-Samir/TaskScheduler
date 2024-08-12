@@ -1,6 +1,0 @@
-#ifndef HITACHI_PLUGIN_H
-#define HITACHI_PLUGIN_H
-
-
-
-#endif //HITACHI_PLUGIN_H

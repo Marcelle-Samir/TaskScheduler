@@ -1,9 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
-project(HitachiPlugin)
+project(HitachiScheduler)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
+# Include GoogleTest
 include(FetchContent)
 
 FetchContent_Declare(
@@ -21,20 +19,18 @@ endif()
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_executable(
-    HitachiPlugin_test
-    HitachiPlugin_test.cpp
-)
+# Add the test executable
+add_executable(HitachiScheduler_test HitachiScheduler_test.cpp)
 
-add_test(
-    NAME HitachiPluginTest
-    COMMAND BasicTest
-)
+# Link the test executable with GoogleTest and pthread
+target_link_libraries(HitachiScheduler_test gtest gtest_main pthread)
 
-target_link_libraries(
-    HitachiPlugin_test
-    GTest::gtest_main
-)
+# Enable testing
+enable_testing()
 
+# Add the test
+add_test(NAME HitachiScheduler_test COMMAND HitachiScheduler_test)
+
+# Discover tests (correct the target name here)
 include(GoogleTest)
-gtest_discover_tests(HitachiPlugin_test)
+gtest_discover_tests(HitachiScheduler_test)
