@@ -1,29 +1,54 @@
-#include <iostream>
 #include "HitachiScheduler.h"
+#include <iostream>
 
-int main() {
-    HitachiScheduler scheduler;
-    std::function<void()> action;
-    Task task1 = new Task(1, action);
-    Task task2 = new Task(2, action);
-    Task task3 = new Task(3, action);
-    task1.execution_time = std::chrono::system_clock::now() + std::chrono::seconds(5);
-    task2.execution_time = std::chrono::system_clock::now() + std::chrono::seconds(3);
-    task3.execution_time = std::chrono::system_clock::now() + std::chrono::seconds(1);
+void taskAction(int id)
+{
+    std::cout << "Task " << id << " is being executed." << std::endl;
+}
 
-    scheduler.addTask(task1);
-    scheduler.addTask(task2);
-    scheduler.addTask(task3);
+int main()
+{
+    std::unique_ptr<SchedulingAlgorithm> fcfsScheduler = std::make_unique<FCFS>();
+    HitachiScheduler scheduler(std::move(fcfsScheduler));
 
-    // Start the execution thread
-    std::thread execution_thread(&HitachiScheduler::executeTasks, &scheduler);
+    for (int i = 0; i < 5; ++i)
+    {
+        scheduler.addTask(std::make_unique<Task>([i]() { taskAction(i); }, i));
+    }
 
-    // Simulate a running system for 10 seconds
-    std::this_thread::sleep_for(std::chrono::seconds(10));
+    std::this_thread::sleep_for(std::chrono::seconds(2));
 
-    // Stop the scheduler
+    std::unique_ptr<SchedulingAlgorithm> roundRobinScheduler = std::make_unique<RoundRobin>();
+    scheduler.setAlgorithm(std::move(roundRobinScheduler));
+
+    for (int i = 5; i < 10; ++i)
+    {
+        scheduler.addTask(std::make_unique<Task>([i]() { taskAction(i); }, i));
+    }
+
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+
+    std::unique_ptr<SchedulingAlgorithm> sjnScheduler = std::make_unique<SJN>();
+    scheduler.setAlgorithm(std::move(sjnScheduler));
+
+    for (int i = 10; i < 15; ++i)
+    {
+        scheduler.addTask(std::make_unique<Task>([i]() { taskAction(i); }, i * 10, i * 2));
+    }
+
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+
+    std::unique_ptr<SchedulingAlgorithm> prioritySchedulingScheduler = std::make_unique<PriorityScheduling>();
+    scheduler.setAlgorithm(std::move(prioritySchedulingScheduler));
+
+    for (int i = 15; i < 20; ++i)
+    {
+        scheduler.addTask(std::make_unique<Task>([i]() { taskAction(i); }, 20 - i));
+    }
+
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+
     scheduler.stopScheduler();
-    execution_thread.join();
 
     return 0;
 }

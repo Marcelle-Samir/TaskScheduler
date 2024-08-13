@@ -1,63 +1,67 @@
 #include "HitachiScheduler.h"
 #include <iostream>
 
-void HitachiScheduler::addTask(const Task& task) {
-    taskQueue.push(task);
+void HitachiScheduler::setAlgorithm(std::unique_ptr<SchedulingAlgorithm> algo)
+{
+    std::lock_guard<std::mutex> lock(queueMutex);
+    schedulingAlgorithm = std::move(algo);
+}
+
+void HitachiScheduler::addTask(std::unique_ptr<Task> task)
+{
+    std::lock_guard<std::mutex> lock(queueMutex);
+    if (dynamic_cast<FCFS*>(schedulingAlgorithm.get()) ||
+        dynamic_cast<RoundRobin*>(schedulingAlgorithm.get()))
+    {
+        taskQueue.push(std::move(task));
+    }
+    else if (dynamic_cast<SJN*>(schedulingAlgorithm.get()) ||
+               dynamic_cast<PriorityScheduling*>(schedulingAlgorithm.get()))
+    {
+        priorityQueue.push(std::move(task));
+    }
     cv.notify_one();
 }
 
-void HitachiScheduler::removeTask(int taskId) {
+void HitachiScheduler::removeTask(int taskId)
+{
     std::lock_guard<std::mutex> lock(queueMutex);
-    std::priority_queue<Task> newQueue;
-    while (!taskQueue.empty()) {
-        auto task = taskQueue.top();
-        taskQueue.pop();
-        if (task.id != taskId) {
-            newQueue.push(task);
-        }
-    }
-    std::swap(taskQueue, newQueue);
+    // to be implemented
 }
 
-void HitachiScheduler::executeTasks() {
-    while (true) {
-        std::unique_lock<std::mutex> lock(queueMutex);
-        if (stop) break;
+void HitachiScheduler::stopScheduler()
+{
+    stop = true;
+    cv.notify_one();
+}
 
-        if (!taskQueue.empty()) {
-            auto nextTask = taskQueue.top();
-            if (cv.wait_until(lock, nextTask.execution_time, [this, &nextTask] {
-                    return stop || std::chrono::system_clock::now() >= nextTask.execution_time;
-                })) {
-                if (!stop) {
-                    taskQueue.pop();
-                    lock.unlock();
-                    try {
-                        nextTask.action();
-                    } catch (const std::exception& e) {
-                        std::cerr << "Exception caught during task execution: " << e.what() << std::endl;
-                    } catch (...) {
-                        std::cerr << "Unknown exception caught during task execution." << std::endl;
-                    }
-                }
-            }
-        } else {
-            cv.wait(lock);
-        }
+void HitachiScheduler::startScheduler()
+{
+    if (stop)
+    {
+        stop = false;
+        workerThread = std::thread(&HitachiScheduler::executeTasks, this);
     }
 }
 
-void HitachiScheduler::startScheduler() {
-    workerThread = std::thread(&HitachiScheduler::executeTasks, this);
-}
-
-void HitachiScheduler::stopScheduler() {
-            {
-            std::lock_guard<std::mutex> lock(queueMutex);
-            stop = true;
+void HitachiScheduler::executeTasks()
+{
+    while (!stop) {
+        if (auto* fcfsAlgo = dynamic_cast<FCFS*>(schedulingAlgorithm.get()))
+        {
+            fcfsAlgo->schedule(taskQueue, queueMutex, cv);
         }
-        cv.notify_all();
-        if (workerThread.joinable()) {
-            workerThread.join();
+        else if (auto* rrAlgo = dynamic_cast<RoundRobin*>(schedulingAlgorithm.get()))
+        {
+            rrAlgo->schedule(taskQueue, queueMutex, cv);
         }
+        else if (auto* sjnAlgo = dynamic_cast<SJN*>(schedulingAlgorithm.get()))
+        {
+            sjnAlgo->schedule(priorityQueue, queueMutex, cv);
+        }
+        else if (auto* psAlgo = dynamic_cast<PriorityScheduling*>(schedulingAlgorithm.get()))
+        {
+            psAlgo->schedule(priorityQueue, queueMutex, cv);
+        }
+    }
 }

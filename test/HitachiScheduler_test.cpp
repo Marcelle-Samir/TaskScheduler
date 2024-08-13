@@ -1,73 +1,173 @@
 #include <gtest/gtest.h>
+#include "../src/HitachiScheduler.h"
 #include <chrono>
 #include <thread>
-#include <vector>
-#include <memory>
-#include "../src/HitachiScheduler.h"
 
-class HitachiSchedulerTest : public ::testing::Test {
+class SchedulerTest : public ::testing::Test
+{
 protected:
-    void SetUp() override {
-        scheduler = std::make_unique<HitachiScheduler>();
-        scheduler->startScheduler();
+    void SetUp() override
+    {
+        // to be added
     }
 
-    void TearDown() override {
-        scheduler->stopScheduler();
+    void TearDown() override
+    {
+        // to be added
     }
-
-    std::unique_ptr<HitachiScheduler> scheduler;
 };
 
-// Test adding and executing a single task
-// TEST_F(HitachiSchedulerTest, ExecuteSingleTask) {
-//     bool executed = false;
-//     scheduler->addTask({1, 1, std::chrono::system_clock::now() + std::chrono::seconds(1), [&]() {
-//         executed = true;
-//     }});
+TEST_F(SchedulerTest, FCFS_ScheduleTest)
+{
+    auto fcfsScheduler = std::make_unique<FCFS>();
+    HitachiScheduler scheduler(std::move(fcfsScheduler));
 
-//     std::this_thread::sleep_for(std::chrono::seconds(2)); // Wait for the task to execute
-//     ASSERT_TRUE(executed);
-// }
+    std::promise<void> task1Promise;
+    std::promise<void> task2Promise;
+    bool task1Executed = false;
+    bool task2Executed = false;
 
-// // Test adding and removing a task
-// TEST_F(HitachiSchedulerTest, AddRemoveTask) {
-//     bool executed = false;
-//     scheduler->addTask({1, 1, std::chrono::system_clock::now() + std::chrono::seconds(2), [&]() {
-//         executed = true;
-//     }});
+    scheduler.addTask(std::make_unique<Task>([&]()
+    {
+        task1Executed = true;
+        task1Promise.set_value();
+    }, 1));
 
-//     scheduler->removeTask(1);
-//     std::this_thread::sleep_for(std::chrono::seconds(3)); // Wait longer than task execution time
-//     ASSERT_FALSE(executed); // Task should not be executed
-// }
+    scheduler.addTask(std::make_unique<Task>([&]()
+    {
+        task2Executed = true;
+        task2Promise.set_value();
+    }, 2));
 
-// // Test executing multiple tasks
-// TEST_F(HitachiSchedulerTest, ExecuteMultipleTasks) {
-//     int counter = 0;
-//     scheduler->addTask({1, 1, std::chrono::system_clock::now() + std::chrono::seconds(1), [&]() {
-//         counter++;
-//     }});
-//     scheduler->addTask({2, 2, std::chrono::system_clock::now() + std::chrono::seconds(1), [&]() {
-//         counter++;
-//     }});
+    task1Promise.get_future().wait();
+    task2Promise.get_future().wait();
 
-//     std::this_thread::sleep_for(std::chrono::seconds(2)); // Wait for tasks to execute
-//     ASSERT_EQ(counter, 2);
-// }
+    EXPECT_TRUE(task1Executed);
+    EXPECT_TRUE(task2Executed);
+}
 
-// // Test task execution order
-// TEST_F(HitachiSchedulerTest, TaskExecutionOrder) {
-//     std::vector<int> executionOrder;
-//     scheduler->addTask({1, 1, std::chrono::system_clock::now() + std::chrono::seconds(2), [&]() {
-//         executionOrder.push_back(1);
-//     }});
-//     scheduler->addTask({2, 2, std::chrono::system_clock::now() + std::chrono::seconds(1), [&]() {
-//         executionOrder.push_back(2);
-//     }});
+TEST_F(SchedulerTest, RoundRobin_ScheduleTest)
+{
+    auto roundRobinScheduler = std::make_unique<RoundRobin>();
+    HitachiScheduler scheduler(std::move(roundRobinScheduler));
 
-//     std::this_thread::sleep_for(std::chrono::seconds(3)); // Wait for tasks to execute
-//     ASSERT_EQ(executionOrder.size(), 2);
-//     ASSERT_EQ(executionOrder[0], 2);
-//     ASSERT_EQ(executionOrder[1], 1);
-// }
+    std::promise<void> task1Promise;
+    std::promise<void> task2Promise;
+    bool task1Executed = false;
+    bool task2Executed = false;
+
+    scheduler.addTask(std::make_unique<Task>([&]()
+    {
+        task1Executed = true;
+        task1Promise.set_value();
+    }, 1));
+
+    scheduler.addTask(std::make_unique<Task>([&]()
+    {
+        task2Executed = true;
+        task2Promise.set_value();
+    }, 2));
+
+    task1Promise.get_future().wait();
+    task2Promise.get_future().wait();
+
+    EXPECT_TRUE(task1Executed);
+    EXPECT_TRUE(task2Executed);
+}
+
+TEST_F(SchedulerTest, SJN_ScheduleTest)
+{
+    auto sjnScheduler = std::make_unique<SJN>();
+    HitachiScheduler scheduler(std::move(sjnScheduler));
+
+    std::promise<void> task1Promise;
+    std::promise<void> task2Promise;
+    bool task1Executed = false;
+    bool task2Executed = false;
+
+    scheduler.addTask(std::make_unique<Task>([&]()
+    {
+        task1Executed = true;
+        task1Promise.set_value();
+    }, 1, 5));
+
+    scheduler.addTask(std::make_unique<Task>([&]()
+    {
+        task2Executed = true;
+        task2Promise.set_value();
+    }, 2, 3));
+
+    task1Promise.get_future().wait();
+    task2Promise.get_future().wait();
+
+    EXPECT_TRUE(task1Executed);
+    EXPECT_TRUE(task2Executed);
+}
+
+TEST_F(SchedulerTest, PriorityScheduling_ScheduleTest)
+{
+    auto priorityScheduler = std::make_unique<PriorityScheduling>();
+    HitachiScheduler scheduler(std::move(priorityScheduler));
+
+    std::promise<void> task1Promise;
+    std::promise<void> task2Promise;
+    bool task1Executed = false;
+    bool task2Executed = false;
+
+    scheduler.addTask(std::make_unique<Task>([&]()
+    {
+        task1Executed = true;
+        task1Promise.set_value();
+    }, 1));
+
+    scheduler.addTask(std::make_unique<Task>([&]()
+    {
+        task2Executed = true;
+        task2Promise.set_value();
+    }, 2));
+
+    task1Promise.get_future().wait();
+    task2Promise.get_future().wait();
+
+    EXPECT_TRUE(task1Executed);
+    EXPECT_TRUE(task2Executed);
+}
+
+TEST_F(SchedulerTest, HitachiScheduler_Test)
+{
+    auto fcfsScheduler = std::make_unique<FCFS>();
+    HitachiScheduler scheduler(std::move(fcfsScheduler));
+
+    std::promise<void> task1Promise;
+    bool task1Executed = false;
+
+    scheduler.addTask(std::make_unique<Task>([&]()
+    {
+        task1Executed = true;
+        task1Promise.set_value();
+    }, 1));
+
+    task1Promise.get_future().wait();
+    EXPECT_TRUE(task1Executed);
+
+    auto roundRobinScheduler = std::make_unique<RoundRobin>();
+    scheduler.setAlgorithm(std::move(roundRobinScheduler));
+
+    std::promise<void> task2Promise;
+    bool task2Executed = false;
+
+    scheduler.addTask(std::make_unique<Task>([&]()
+    {
+        task2Executed = true;
+        task2Promise.set_value();
+    }, 2));
+
+    task2Promise.get_future().wait();
+    EXPECT_TRUE(task2Executed);
+}
+
+int main(int argc, char **argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
