@@ -11,6 +11,7 @@
 #include <mutex>
 #include <future>
 #include <chrono>
+#include <algorithm>
 
 class Task
 {
@@ -72,10 +73,58 @@ public:
         }
     }
 
+    void end()
+    {
+        if (!isTaskComplete)
+        {
+            std::cout << "Task completed successfully.\n";
+        }
+    }
+
     void start()
     {
         startPromise.set_value();
+        std::this_thread::sleep_for(std::chrono::milliseconds(totalDuration));
+        isTaskComplete = true;
+        end();
     }
+
+    int getDuration() const
+    {
+        return totalDuration;
+    }
+
+    int getPriority() const
+    {
+        return Taskpriority;
+    }
+
+    void runFor(int timeSlice)
+    {
+        if (remainingTime > 0)
+        {
+            int timeToRun = std::min(timeSlice, remainingTime);
+            std::this_thread::sleep_for(std::chrono::milliseconds(timeToRun));
+            remainingTime -= timeToRun;
+
+            if (remainingTime <= 0)
+            {
+                isTaskComplete = true;
+                end();
+            }
+        }
+    }
+
+    bool isComplete() const
+    {
+        return isTaskComplete;
+    }
+
+private:
+    int totalDuration;
+    int remainingTime;
+    int Taskpriority;
+    std::atomic<bool> isTaskComplete;
 };
 
 struct TaskComparator
@@ -92,6 +141,7 @@ public:
     virtual ~SchedulingAlgorithm() = default;
     virtual void schedule(std::queue<std::unique_ptr<Task>>& taskQueue, std::mutex& queueMutex, std::condition_variable& cv) = 0;
     virtual void schedule(std::priority_queue<std::unique_ptr<Task>, std::vector<std::unique_ptr<Task>>, TaskComparator>& taskQueue, std::mutex& queueMutex, std::condition_variable& cv) = 0;
+    virtual void schedule(std::vector<std::unique_ptr<Task>>& taskList, std::mutex& queueMutex, std::condition_variable& cv) = 0;
 };
 
 class FCFS : public SchedulingAlgorithm
@@ -114,6 +164,10 @@ public:
     {
         // not required
     }
+    void schedule(std::vector<std::unique_ptr<Task>>& taskList, std::mutex& queueMutex, std::condition_variable& cv)
+    {
+        // not required
+    }
 
 };
 
@@ -122,12 +176,26 @@ class RoundRobin : public SchedulingAlgorithm
 public:
     void schedule(std::queue<std::unique_ptr<Task>>& taskQueue, std::mutex& queueMutex, std::condition_variable& cv) override
     {
+        static const int timeSlice = 100;
         std::unique_lock<std::mutex> lock(queueMutex);
-        if (!taskQueue.empty()) {
+        cv.wait(lock, [&taskQueue](){ return !taskQueue.empty(); });
+
+        if (!taskQueue.empty())
+        {
             std::unique_ptr<Task> task = std::move(taskQueue.front());
             taskQueue.pop();
             taskQueue.push(std::move(task));
             lock.unlock();
+            task->runFor(timeSlice);
+            if (!task->isComplete())
+            {
+                std::unique_lock<std::mutex> lock(queueMutex);
+                taskQueue.push(std::move(task));
+            }
+            else
+            {
+                task->end();
+            }
             taskQueue.back()->start();
             cv.notify_one();
         }
@@ -136,24 +204,38 @@ public:
     {
         // not required
     }
+    void schedule(std::vector<std::unique_ptr<Task>>& taskList, std::mutex& queueMutex, std::condition_variable& cv)    override
+    {
+        // not required
+    }
 };
 
 class SJN : public SchedulingAlgorithm
 {
 public:
-    void schedule(std::priority_queue<std::unique_ptr<Task>, std::vector<std::unique_ptr<Task>>, TaskComparator>& taskQueue, std::mutex& queueMutex, std::condition_variable& cv) override
+    void schedule(std::vector<std::unique_ptr<Task>>& taskList, std::mutex& queueMutex, std::condition_variable& cv) override
     {
         std::unique_lock<std::mutex> lock(queueMutex);
-        if (!taskQueue.empty())
+        cv.wait(lock, [&taskList]() { return !taskList.empty(); });
+        auto shortestTaskIt = std::min_element(taskList.begin(), taskList.end(),
+                                           [](const std::unique_ptr<Task>& a, const std::unique_ptr<Task>& b)
+                                           {
+                                               return a->getDuration() < b->getDuration();
+                                           });
+
+        if (shortestTaskIt != taskList.end())
         {
-            std::unique_ptr<Task> task = std::move(const_cast<std::unique_ptr<Task>&>(taskQueue.top()));
-            taskQueue.pop();
+            auto task = std::move(*shortestTaskIt);
+            taskList.erase(shortestTaskIt);
             lock.unlock();
             task->start();
-            cv.notify_one();
         }
     }
     void schedule(std::queue<std::unique_ptr<Task>>& taskQueue, std::mutex& queueMutex, std::condition_variable& cv) override
+    {
+        // not required
+    }
+    void schedule(std::priority_queue<std::unique_ptr<Task>, std::vector<std::unique_ptr<Task>>, TaskComparator>& taskQueue, std::mutex& queueMutex, std::condition_variable& cv)  override
     {
         // not required
     }
@@ -162,19 +244,29 @@ public:
 class PriorityScheduling : public SchedulingAlgorithm
 {
 public:
-    void schedule(std::priority_queue<std::unique_ptr<Task>, std::vector<std::unique_ptr<Task>>, TaskComparator>& taskQueue, std::mutex& queueMutex, std::condition_variable& cv) override
+    void schedule(std::vector<std::unique_ptr<Task>>& taskList, std::mutex& queueMutex, std::condition_variable& cv) override
     {
         std::unique_lock<std::mutex> lock(queueMutex);
-        if (!taskQueue.empty())
+        cv.wait(lock, [&taskList]() { return !taskList.empty(); });
+        auto highestPriorityTaskIt = std::min_element(taskList.begin(), taskList.end(),
+                                                  [](const std::unique_ptr<Task>& a, const std::unique_ptr<Task>& b)
+                                                  {
+                                                      return a->getPriority() < b->getPriority();
+                                                  });
+
+        if (highestPriorityTaskIt != taskList.end())
         {
-            std::unique_ptr<Task> task = std::move(const_cast<std::unique_ptr<Task>&>(taskQueue.top()));
-            taskQueue.pop();
+            auto task = std::move(*highestPriorityTaskIt);
+            taskList.erase(highestPriorityTaskIt);
             lock.unlock();
             task->start();
-            cv.notify_one();
         }
     }
     void schedule(std::queue<std::unique_ptr<Task>>& taskQueue, std::mutex& queueMutex, std::condition_variable& cv) override
+    {
+        // not required
+    }
+    void schedule(std::priority_queue<std::unique_ptr<Task>, std::vector<std::unique_ptr<Task>>, TaskComparator>& taskQueue, std::mutex& queueMutex, std::condition_variable& cv)    override
     {
         // not required
     }
