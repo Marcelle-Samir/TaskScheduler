@@ -1,0 +1,290 @@
+[==========] Running 9 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 9 tests from HitachiSchedulerTest
+[ RUN      ] HitachiSchedulerTest.SetAlgorithm
+HitachiScheduler is Called.
+setAlgorithm is Called.
+startScheduler is Called.
+executeTasks is Called.
+schedule is Called in RoundRobin Algorithm.
+taskQueue is empty.
+Scheduler stopping...
+stopScheduler is Called.
+[       OK ] HitachiSchedulerTest.SetAlgorithm (1 ms)
+[ RUN      ] HitachiSchedulerTest.AddTaskFCFS
+HitachiScheduler is Called.
+Task is Called.
+addTask is Called.
+startScheduler is Called.
+executeTasks is Called.
+schedule is Called in FCFS Algorithm.
+taskQueue is not empty.
+start is Called.
+Task Executed
+schedule is Called in FCFS Algorithm.
+taskQueue is empty.
+Scheduler stopping...
+stopScheduler is Called.
+[       OK ] HitachiSchedulerTest.AddTaskFCFS (2 ms)
+[ RUN      ] HitachiSchedulerTest.AddTaskRoundRobin
+HitachiScheduler is Called.
+Task is Called.
+addTask is Called.
+startScheduler is Called.
+executeTasks is Called.
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+end is Called.
+Task completed successfully.
+isComplete is Called.
+Task is completed!
+end is Called.
+Task completed successfully.
+schedule is Called in RoundRobin Algorithm.
+taskQueue is empty.
+Scheduler stopping...
+stopScheduler is Called.
+[       OK ] HitachiSchedulerTest.AddTaskRoundRobin (9 ms)
+[ RUN      ] HitachiSchedulerTest.AddTaskSJN
+HitachiScheduler is Called.
+Task is Called.
+addTask is Called.
+startScheduler is Called.
+executeTasks is Called.
+schedule is Called in SJN Algorithm.
+start is Called.
+Task Executed
+schedule is Called in SJN Algorithm.
+TaskList is empty.
+Scheduler stopping...
+stopScheduler is Called.
+[       OK ] HitachiSchedulerTest.AddTaskSJN (1 ms)
+[ RUN      ] HitachiSchedulerTest.AddTaskPriorityScheduling
+HitachiScheduler is Called.
+Task is Called.
+addTask is Called.
+startScheduler is Called.
+executeTasks is Called.
+schedule is Called in PriorityScheduling Algorithm.
+start is Called.
+Task Executed
+schedule is Called in PriorityScheduling Algorithm.
+taskList is empty.
+Scheduler stopping...
+stopScheduler is Called.
+[       OK ] HitachiSchedulerTest.AddTaskPriorityScheduling (1 ms)
+[ RUN      ] HitachiSchedulerTest.ExecuteTasksFCFS
+HitachiScheduler is Called.
+Task is Called.
+addTask is Called.
+Task is Called.
+addTask is Called.
+Task is Called.
+addTask is Called.
+startScheduler is Called.
+executeTasks is Called.
+schedule is Called in FCFS Algorithm.
+taskQueue is not empty.
+start is Called.
+Task 0 Executed
+schedule is Called in FCFS Algorithm.
+taskQueue is not empty.
+start is Called.
+Task 1 Executed
+schedule is Called in FCFS Algorithm.
+taskQueue is not empty.
+start is Called.
+Task 2 Executed
+schedule is Called in FCFS Algorithm.
+taskQueue is empty.
+Scheduler stopping...
+stopScheduler is Called.
+[       OK ] HitachiSchedulerTest.ExecuteTasksFCFS (3 ms)
+[ RUN      ] HitachiSchedulerTest.ExecuteTasksRoundRobin
+HitachiScheduler is Called.
+Task is Called.
+addTask is Called.
+Task is Called.
+addTask is Called.
+Task is Called.
+addTask is Called.
+startScheduler is Called.
+executeTasks is Called.
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+end is Called.
+Task completed successfully.
+isComplete is Called.
+Task is completed!
+end is Called.
+Task completed successfully.
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+end is Called.
+Task completed successfully.
+isComplete is Called.
+Task is completed!
+end is Called.
+Task completed successfully.
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+end is Called.
+Task completed successfully.
+isComplete is Called.
+Task is completed!
+end is Called.
+Task completed successfully.
+schedule is Called in RoundRobin Algorithm.
+taskQueue is empty.
+Scheduler stopping...
+stopScheduler is Called.
+[       OK ] HitachiSchedulerTest.ExecuteTasksRoundRobin (28 ms)
+[ RUN      ] HitachiSchedulerTest.ExecuteTasksSJN
+HitachiScheduler is Called.
+Task is Called.
+addTask is Called.
+Task is Called.
+addTask is Called.
+Task is Called.
+addTask is Called.
+startScheduler is Called.
+executeTasks is Called.
+schedule is Called in SJN Algorithm.
+getDuration is Called.
+getDuration is Called.
+getDuration is Called.
+getDuration is Called.
+start is Called.
+Task 0 Executed
+schedule is Called in SJN Algorithm.
+getDuration is Called.
+getDuration is Called.
+start is Called.
+Task 1 Executed
+schedule is Called in SJN Algorithm.
+start is Called.
+Task 2 Executed
+schedule is Called in SJN Algorithm.
+TaskList is empty.
+Scheduler stopping...
+stopScheduler is Called.
+[       OK ] HitachiSchedulerTest.ExecuteTasksSJN (3 ms)
+[ RUN      ] HitachiSchedulerTest.ExecuteTasksPriorityScheduling
+HitachiScheduler is Called.
+Task is Called.
+addTask is Called.
+Task is Called.
+addTask is Called.
+Task is Called.
+addTask is Called.
+startScheduler is Called.
+executeTasks is Called.
+schedule is Called in PriorityScheduling Algorithm.
+getPriority is Called.
+getPriority is Called.
+getPriority is Called.
+getPriority is Called.
+start is Called.
+Task 0 Executed
+schedule is Called in PriorityScheduling Algorithm.
+getPriority is Called.
+getPriority is Called.
+start is Called.
+Task 1 Executed
+schedule is Called in PriorityScheduling Algorithm.
+start is Called.
+Task 2 Executed
+schedule is Called in PriorityScheduling Algorithm.
+taskList is empty.
+Scheduler stopping...
+stopScheduler is Called.
+[       OK ] HitachiSchedulerTest.ExecuteTasksPriorityScheduling (3 ms)
+[----------] 9 tests from HitachiSchedulerTest (54 ms total)
+
+[----------] Global test environment tear-down
+[==========] 9 tests from 1 test suite ran. (56 ms total)
+[  PASSED  ] 9 tests.

@@ -1,0 +1,300 @@
+HitachiScheduler is Called.
+Task is Called.
+addTask is Called.
+Task is Called.
+addTask is Called.
+Task is Called.
+addTask is Called.
+Task is Called.
+addTask is Called.
+Task is Called.
+addTask is Called.
+startScheduler is Called.
+executeTasks is Called.
+schedule is Called in FCFS Algorithm.
+taskQueue is not empty.
+start is Called.
+Task 0 is being executed.
+schedule is Called in FCFS Algorithm.
+taskQueue is not empty.
+start is Called.
+Task 1 is being executed.
+schedule is Called in FCFS Algorithm.
+taskQueue is not empty.
+start is Called.
+Task 2 is being executed.
+schedule is Called in FCFS Algorithm.
+taskQueue is not empty.
+start is Called.
+Task 3 is being executed.
+schedule is Called in FCFS Algorithm.
+taskQueue is not empty.
+start is Called.
+Task 4 is being executed.
+schedule is Called in FCFS Algorithm.
+taskQueue is empty.
+Scheduler stopping...
+setAlgorithm is Called.
+Task is Called.
+addTask is Called.
+Task is Called.
+addTask is Called.
+Task is Called.
+addTask is Called.
+Task is Called.
+addTask is Called.
+Task is Called.
+addTask is Called.
+startScheduler is Called.
+executeTasks is Called.
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+isComplete is Called.
+Task is not completed!
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+end is Called.
+Task completed successfully.
+isComplete is Called.
+Task is completed!
+end is Called.
+Task completed successfully.
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+end is Called.
+Task completed successfully.
+isComplete is Called.
+Task is completed!
+end is Called.
+Task completed successfully.
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+end is Called.
+Task completed successfully.
+isComplete is Called.
+Task is completed!
+end is Called.
+Task completed successfully.
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+end is Called.
+Task completed successfully.
+isComplete is Called.
+Task is completed!
+end is Called.
+Task completed successfully.
+schedule is Called in RoundRobin Algorithm.
+taskQueue is not empty.
+runFor is Called.
+end is Called.
+Task completed successfully.
+isComplete is Called.
+Task is completed!
+end is Called.
+Task completed successfully.
+schedule is Called in RoundRobin Algorithm.
+taskQueue is empty.
+Scheduler stopping...
+setAlgorithm is Called.
+Task is Called.
+addTask is Called.
+Task is Called.
+addTask is Called.
+Task is Called.
+addTask is Called.
+Task is Called.
+addTask is Called.
+Task is Called.
+addTask is Called.
+startScheduler is Called.
+executeTasks is Called.
+schedule is Called in SJN Algorithm.
+getDuration is Called.
+getDuration is Called.
+getDuration is Called.
+getDuration is Called.
+getDuration is Called.
+getDuration is Called.
+getDuration is Called.
+getDuration is Called.
+start is Called.
+Task 10 is being executed.
+schedule is Called in SJN Algorithm.
+getDuration is Called.
+getDuration is Called.
+getDuration is Called.
+getDuration is Called.
+getDuration is Called.
+getDuration is Called.
+start is Called.
+Task 11 is being executed.
+schedule is Called in SJN Algorithm.
+getDuration is Called.
+getDuration is Called.
+getDuration is Called.
+getDuration is Called.
+start is Called.
+Task 12 is being executed.
+schedule is Called in SJN Algorithm.
+getDuration is Called.
+getDuration is Called.
+start is Called.
+Task 13 is being executed.
+schedule is Called in SJN Algorithm.
+start is Called.
+Task 14 is being executed.
+schedule is Called in SJN Algorithm.
+TaskList is empty.
+Scheduler stopping...
+setAlgorithm is Called.
+Task is Called.
+addTask is Called.
+Task is Called.
+addTask is Called.
+Task is Called.
+addTask is Called.
+Task is Called.
+addTask is Called.
+Task is Called.
+addTask is Called.
+startScheduler is Called.
+executeTasks is Called.
+schedule is Called in PriorityScheduling Algorithm.
+getPriority is Called.
+getPriority is Called.
+getPriority is Called.
+getPriority is Called.
+getPriority is Called.
+getPriority is Called.
+getPriority is Called.
+getPriority is Called.
+start is Called.
+Task 15 is being executed.
+schedule is Called in PriorityScheduling Algorithm.
+getPriority is Called.
+getPriority is Called.
+getPriority is Called.
+getPriority is Called.
+getPriority is Called.
+getPriority is Called.
+start is Called.
+Task 16 is being executed.
+schedule is Called in PriorityScheduling Algorithm.
+getPriority is Called.
+getPriority is Called.
+getPriority is Called.
+getPriority is Called.
+start is Called.
+Task 17 is being executed.
+schedule is Called in PriorityScheduling Algorithm.
+getPriority is Called.
+getPriority is Called.
+start is Called.
+Task 18 is being executed.
+schedule is Called in PriorityScheduling Algorithm.
+start is Called.
+Task 19 is being executed.
+schedule is Called in PriorityScheduling Algorithm.
+taskList is empty.
+Scheduler stopping...
+stopScheduler is Called.

@@ -1,76 +1,36 @@
 # Hitachi_Task
 
-C++ Senior Software Engineer Task
-Task: Implement a Real-Time Task Scheduler
-Objective: Develop a real-time task scheduler in C++ that manages and executes tasks based on their
-priority and timing constraints. The scheduler should support adding, removing, and executing tasks
-according to specific scheduling algorithms. The task is designed to assess your understanding of data
-structures, algorithms, and concurrency in C++.
-Requirements
+## Real-Time Task Scheduler
+a real-time task scheduler in C++ that manages and executes tasks based on their
+priority and timing constraints. The scheduler supports adding, removing, and executing tasks
+according to the following scheduling algorithms.
+- First-Come, First-Served (FCFS)
+- Shortest Job Next (SJN)
+- Priority Scheduling
+- Round-Robin (with time quantum)
+The algorithm can be selected in the run time by creating a pointer to an object of the algorithm type you want to select, \
+then pass this pointer as an argument to the scheduler, as shown in the following lines:
 
-1. Core Functionality:
-o Task Representation: Implement a Task class that represents a unit of work. Each task
-should have a unique ID, priority level, and execution time.
-o Scheduler Implementation: Implement a TaskScheduler class that manages and
-executes tasks based on their priority and timing constraints. The scheduler should
-support at least the following scheduling algorithms:
- First-Come, First-Served (FCFS)
- Shortest Job Next (SJN)
- Priority Scheduling
- Round-Robin (with time quantum)
-o Concurrency: The scheduler should be able to execute tasks in parallel using threads.
-The number of threads should be configurable.
-o Task Management:
- Add Task: Add a new task to the scheduler.
- Remove Task: Remove a task from the scheduler before it starts executing.
- Execute Tasks: Start the task execution based on the selected scheduling
-algorithm.
+    > std::unique_ptr<SchedulingAlgorithm> fcfsScheduler = std::make_unique<FCFS>(); \
+    > HitachiScheduler scheduler(std::move(fcfsScheduler));
 
-2. Technical Requirements:
-o Use C++17 or later.
-o Implement the solution using CMake as the build system.
-o Write unit tests for your code using GoogleTest.
-o Use Conan for dependency management if any external libraries are needed.
-o Use std::thread or std::async for concurrency.
+### Building and running
+This scheduler was implemented using CMake as the build system in a dev-container.
+the devcontainer configs are already part of this repo, so you can use it to build without worring about any dependencies.
 
-o Use appropriate data structures (e.g., priority queues, queues) to implement the
-scheduling algorithms.
+- After cloning the repo reopen it in the devcontainer.
+- Create a directory (ex. build).
+- Change your current directory to it:
+  > cd ./build
+- run the following command for the CMake scripts:
+  > cmake ..
+- run the following command to build the code:
+  > make
 
-3. Advanced Requirements (Bonus Points):
-o Dynamic Task Scheduling: Implement the ability to dynamically change the scheduling
-algorithm while tasks are being executed.
-o Logging and Monitoring: Add logging functionality to track task scheduling and
-execution. Provide basic performance metrics (e.g., average wait time, CPU utilization).
-o Task Dependencies: Implement support for task dependencies, where a task can only
-start after one or more other tasks have completed.
+Now you have every thing and time to start the scheduler:
+  > ./HitachiScheduler
 
-4. Optional (Extra Bonus):
-o Task Persistence: Implement functionality to save the current state of the scheduler and
-tasks to disk and load it back into memory, allowing the scheduler to resume from
-where it left off.
-o Custom Memory Management: Implement custom memory management for the tasks
-to optimize memory usage and allocation speed.
+Then to run the unit tests:
+  > ./HitachiScheduler_test
 
-Task Submission
- Submit your solution as a Git repository (you can use GitHub, GitLab, or any other platform). The
-repository should include:
-o Source code for the application.
-o Unit tests.
-o CMake scripts.
-o Instructions for setting up the development environment, building the application, and
-running the tests.
-o (Optional) Any additional features you implemented as per the advanced and optional
-requirements.
-
-Time Frame
- The task should be completed within 4 days.
-
-Evaluation Criteria
- Code Quality: Clean, maintainable, and well-documented code.
- Scheduling Algorithms: Correct and efficient implementation of scheduling algorithms.
- Concurrency Handling: Correct and efficient handling of concurrency with minimal performance
-overhead.
- Testing: Comprehensive and effective unit tests.
- Use of Tools: Proper use of CMake, GoogleTest, and Conan.
- Advanced Features: Implementation of any advanced features will be considered a plus.
- Optimization: Efficient use of memory and processing resources.
+**Attached to the repo in the testsAndRunLogs Directory the unit tests output and the code output.
