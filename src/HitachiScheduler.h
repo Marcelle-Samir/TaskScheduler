@@ -17,16 +17,8 @@
 
 class HitachiScheduler {
 public:
-    HitachiScheduler(std::unique_ptr<SchedulingAlgorithm> algo)
-        : schedulingAlgorithm(std::move(algo)), stop(true)
-    {
-        std::cout << __FUNCTION__ << " is Called." << std::endl;
-    }
-
-    ~HitachiScheduler()
-    {
-        stopScheduler();
-    }
+    HitachiScheduler(std::unique_ptr<SchedulingAlgorithm> algo);
+    ~HitachiScheduler();
 
     void setAlgorithm(std::unique_ptr<SchedulingAlgorithm> algo);
     void addTask(std::unique_ptr<Task> task);

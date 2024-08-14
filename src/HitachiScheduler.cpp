@@ -1,5 +1,14 @@
 #include "HitachiScheduler.h"
-#include <iostream>
+
+HitachiScheduler::HitachiScheduler(std::unique_ptr<SchedulingAlgorithm> algo)
+    : schedulingAlgorithm(std::move(algo)), stop(true)
+{
+    std::cout << __FUNCTION__ << " is Called." << std::endl;
+}
+HitachiScheduler::~HitachiScheduler()
+{
+    stopScheduler();
+}
 
 void HitachiScheduler::setAlgorithm(std::unique_ptr<SchedulingAlgorithm> algo)
 {

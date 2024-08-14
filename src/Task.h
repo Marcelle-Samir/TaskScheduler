@@ -23,103 +23,21 @@ public:
     std::function<void()> action;
     int duration;
 
-    Task(std::function<void()> action, int pri, int dur = 0)
-        : action(action), priority(pri), duration(dur),
-        remainingTime(dur), isTaskComplete(std::make_shared<std::atomic<bool>>(false))
-        {
-        std::cout << __FUNCTION__ << " is Called." << std::endl;
+    Task(std::function<void()> action, int pri, int dur);
 
-        static int taskCounter = 0;
-        id = taskCounter++;
-    }
+    ~Task();
 
-    Task(Task&& other) noexcept
-        : id(other.id),
-          priority(other.priority),
-          action(std::move(other.action)),
-          execution_time(std::move(other.execution_time)),
-          duration(other.duration),
-          threadPtr(std::move(other.threadPtr)),
-          isTaskComplete(std::move(other.isTaskComplete))
-          {
-          }
+    void end();
 
-    Task& operator=(Task&& other) noexcept
-    {
-        if (this != &other)
-        {
-            id = other.id;
-            priority = other.priority;
-            action = other.action;
-            execution_time = other.execution_time;
-            duration = other.duration;
-            threadPtr = std::move(other.threadPtr);
-            isTaskComplete = std::move(other.isTaskComplete);
-        }
-        return *this;
-    }
+    void start();
 
-    Task(const Task&) = delete;
-    Task& operator=(const Task&) = delete;
+    int getDuration();
 
-    ~Task()
-    {
-        if (threadPtr && threadPtr->joinable())
-        {
-            threadPtr->join();
-        }
-    }
+    int getPriority();
 
-    void end()
-    {
-        std::cout << __FUNCTION__ << " is Called." << std::endl;
-        if (isTaskComplete)
-        {
-            std::cout << "Task completed successfully.\n";
-        }
-    }
+    void runFor(int timeSlice);
 
-    void start()
-    {
-        std::cout << __FUNCTION__ << " is Called." << std::endl;
-        action();
-    }
-
-    int getDuration() const
-    {
-        std::cout << __FUNCTION__ << " is Called." << std::endl;
-        return duration;
-    }
-
-    int getPriority() const
-    {
-        std::cout << __FUNCTION__ << " is Called." << std::endl;
-        return priority;
-    }
-
-    void runFor(int timeSlice)
-    {
-        std::cout << __FUNCTION__ << " is Called." << std::endl;
-        fflush(NULL);
-        if (remainingTime > 0)
-        {
-            int timeToRun = std::min(timeSlice, remainingTime);
-            std::this_thread::sleep_for(std::chrono::milliseconds(timeToRun));
-            remainingTime -= timeToRun;
-
-            if (remainingTime <= 0)
-            {
-                *isTaskComplete = true;
-                end();
-            }
-        }
-    }
-
-    bool isComplete() const
-    {
-        std::cout << __FUNCTION__ << " is Called." << std::endl;
-        return *isTaskComplete;
-    }
+    bool isComplete() const;
 
 private:
     int remainingTime;

@@ -1,5 +1,3 @@
-# Hitachi_Task
-
 ## Real-Time Task Scheduler
 a real-time task scheduler in C++ that manages and executes tasks based on their
 priority and timing constraints. The scheduler supports adding, removing, and executing tasks
@@ -31,6 +29,6 @@ Now you have every thing and time to start the scheduler:
   > ./HitachiScheduler
 
 Then to run the unit tests:
-  > ./HitachiScheduler_test
+  > ./test/HitachiScheduler_test
 
 **Attached to the repo in the testsAndRunLogs Directory the unit tests output and the code output.

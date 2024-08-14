@@ -1,5 +1,11 @@
 add_executable(${PROJECT_NAME}
     HitachiScheduler
+    HitachiScheduler.h
+    HitachiScheduler.cpp
+    SchedulingAlgorithm.h
+    SchedulingAlgorithm.cpp
+    Task.h
+    Task.cpp
     main.cpp
 )
 

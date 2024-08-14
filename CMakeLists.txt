@@ -1,35 +1,26 @@
 cmake_minimum_required(VERSION 3.12)
 project(HitachiScheduler)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-add_executable(HitachiScheduler src/main.cpp src/HitachiScheduler.h src/HitachiScheduler.cpp)
-target_link_libraries(HitachiScheduler pthread)
-include(FetchContent)
-
-FetchContent_Declare(
-  googletest
-  GIT_REPOSITORY https://github.com/google/googletest.git
-  GIT_TAG        release-1.10.0
+set(SOURCES
+  src/main.cpp
+  src/HitachiScheduler.cpp
+  src/SchedulingAlgorithm.cpp
+  src/Task.cpp
 )
 
-FetchContent_GetProperties(googletest)
-if(NOT googletest_POPULATED)
-  FetchContent_Populate(googletest)
-  add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
-endif()
+set(HEADERS
+  src/HitachiScheduler.h
+  src/SchedulingAlgorithm.h
+  src/Task.h
+)
 
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(googletest)
+add_executable(HitachiScheduler ${SOURCES} ${HEADERS})
 
-add_executable(HitachiScheduler_test test/HitachiScheduler_test.cpp src/HitachiScheduler.cpp)
-
-target_link_libraries(HitachiScheduler_test gtest gtest_main pthread)
+target_link_libraries(HitachiScheduler pthread)
 
 enable_testing()
+add_subdirectory(test)
 
-add_test(NAME HitachiScheduler_test COMMAND HitachiScheduler_test)
-
-include(GoogleTest)
-gtest_discover_tests(HitachiScheduler_test)
