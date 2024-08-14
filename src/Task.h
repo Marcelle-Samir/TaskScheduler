@@ -25,8 +25,10 @@ public:
     int duration;
 
     Task(std::function<void()> action, int pri, int dur = 0)
-        : action(action), priority(pri), duration(dur)
+        : action(action), priority(pri), duration(dur),
+        totalDuration(dur), remainingTime(dur), isTaskComplete(std::make_shared<std::atomic<bool>>(false))
         {
+        std::cout << __FUNCTION__ << " is Called." << std::endl;
         static int taskCounter = 0;
         id = taskCounter++;
         threadPtr = std::make_unique<std::thread>([this, action]() mutable
@@ -34,18 +36,23 @@ public:
             while (true) {
                 startPromise.get_future().wait();
                 action();
-                startPromise = std::promise<void>();
+                *isTaskComplete = true;
+                resetPromise();
             }
         });
     }
 
     Task(Task&& other) noexcept
-        : id(other.id), priority(other.priority),
-          action(other.action),
-          execution_time(other.execution_time),
+        : id(other.id),
+          priority(other.priority),
+          action(std::move(other.action)),
+          execution_time(std::move(other.execution_time)),
           duration(other.duration),
           startPromise(std::move(other.startPromise)),
-          threadPtr(std::move(other.threadPtr)) {}
+          threadPtr(std::move(other.threadPtr)),
+          isTaskComplete(std::move(other.isTaskComplete))
+          {
+          }
 
     Task& operator=(Task&& other) noexcept
     {
@@ -58,6 +65,7 @@ public:
             duration = other.duration;
             startPromise = std::move(other.startPromise);
             threadPtr = std::move(other.threadPtr);
+            isTaskComplete = std::move(other.isTaskComplete);
         }
         return *this;
     }
@@ -75,6 +83,7 @@ public:
 
     void end()
     {
+        std::cout << __FUNCTION__ << " is Called." << std::endl;
         if (!isTaskComplete)
         {
             std::cout << "Task completed successfully.\n";
@@ -83,24 +92,28 @@ public:
 
     void start()
     {
+        std::cout << __FUNCTION__ << " is Called." << std::endl;
         startPromise.set_value();
         std::this_thread::sleep_for(std::chrono::milliseconds(totalDuration));
-        isTaskComplete = true;
+        *isTaskComplete = true;
         end();
     }
 
     int getDuration() const
     {
+        std::cout << __FUNCTION__ << " is Called." << std::endl;
         return totalDuration;
     }
 
     int getPriority() const
     {
+        std::cout << __FUNCTION__ << " is Called." << std::endl;
         return Taskpriority;
     }
 
     void runFor(int timeSlice)
     {
+        std::cout << __FUNCTION__ << " is Called." << std::endl;
         if (remainingTime > 0)
         {
             int timeToRun = std::min(timeSlice, remainingTime);
@@ -109,7 +122,7 @@ public:
 
             if (remainingTime <= 0)
             {
-                isTaskComplete = true;
+                *isTaskComplete = true;
                 end();
             }
         }
@@ -117,14 +130,19 @@ public:
 
     bool isComplete() const
     {
-        return isTaskComplete;
+        std::cout << __FUNCTION__ << " is Called." << std::endl;
+        return *isTaskComplete;
     }
 
 private:
     int totalDuration;
     int remainingTime;
     int Taskpriority;
-    std::atomic<bool> isTaskComplete;
+    std::shared_ptr<std::atomic<bool>> isTaskComplete;
+    void resetPromise()
+    {
+        startPromise = std::promise<void>();  // Reset the promise for the next execution
+    }
 };
 
 #endif //TASK_H
