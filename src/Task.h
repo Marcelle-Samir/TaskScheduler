@@ -25,7 +25,7 @@ public:
 
     Task(std::function<void()> action, int pri, int dur = 0)
         : action(action), priority(pri), duration(dur),
-        totalDuration(dur), remainingTime(dur), isTaskComplete(std::make_shared<std::atomic<bool>>(false))
+        remainingTime(dur), isTaskComplete(std::make_shared<std::atomic<bool>>(false))
         {
         std::cout << __FUNCTION__ << " is Called." << std::endl;
 
@@ -88,13 +88,13 @@ public:
     int getDuration() const
     {
         std::cout << __FUNCTION__ << " is Called." << std::endl;
-        return totalDuration;
+        return duration;
     }
 
     int getPriority() const
     {
         std::cout << __FUNCTION__ << " is Called." << std::endl;
-        return Taskpriority;
+        return priority;
     }
 
     void runFor(int timeSlice)
@@ -122,9 +122,7 @@ public:
     }
 
 private:
-    int totalDuration;
     int remainingTime;
-    int Taskpriority;
     std::shared_ptr<std::atomic<bool>> isTaskComplete;
 };
 
