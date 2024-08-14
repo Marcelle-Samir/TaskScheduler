@@ -17,26 +17,22 @@ void HitachiScheduler::addTask(std::unique_ptr<Task> task)
     {
         taskQueue.push(std::move(task));
     }
-    else if (dynamic_cast<SJN*>(schedulingAlgorithm.get()) ||
-               dynamic_cast<PriorityScheduling*>(schedulingAlgorithm.get()))
+    else if(dynamic_cast<SJN*>(schedulingAlgorithm.get()) || dynamic_cast<PriorityScheduling*>(schedulingAlgorithm.get()))
     {
-        priorityQueue.push(std::move(task));
+        taskList.push_back(std::move(task));
     }
-    cv.notify_one();
 }
 
 void HitachiScheduler::removeTask(int taskId)
 {
     std::cout << __FUNCTION__ << " is Called." << std::endl;
     std::lock_guard<std::mutex> lock(queueMutex);
-    // to be implemented
 }
 
 void HitachiScheduler::stopScheduler()
 {
     std::cout << __FUNCTION__ << " is Called." << std::endl;
     stop = true;
-    cv.notify_one();
 }
 
 void HitachiScheduler::startScheduler()
@@ -46,7 +42,16 @@ void HitachiScheduler::startScheduler()
     {
         stop = false;
         workerThread = std::thread(&HitachiScheduler::executeTasks, this);
+        if (workerThread.joinable())
+        {
+            workerThread.join();
+        }
     }
+}
+
+bool HitachiScheduler::isStopped()
+{
+    return stop;
 }
 
 void HitachiScheduler::executeTasks()
@@ -59,19 +64,19 @@ void HitachiScheduler::executeTasks()
         }
         if (auto* fcfsAlgo = dynamic_cast<FCFS*>(schedulingAlgorithm.get()))
         {
-            fcfsAlgo->schedule(taskQueue, queueMutex, cv, stop);
+            fcfsAlgo->schedule(taskQueue, queueMutex, stop);
         }
         else if (auto* rrAlgo = dynamic_cast<RoundRobin*>(schedulingAlgorithm.get()))
         {
-            rrAlgo->schedule(taskQueue, queueMutex, cv, stop);
+            rrAlgo->schedule(taskQueue, queueMutex, stop);
         }
         else if (auto* sjnAlgo = dynamic_cast<SJN*>(schedulingAlgorithm.get()))
         {
-            sjnAlgo->schedule(priorityQueue, queueMutex, cv, stop);
+            sjnAlgo->schedule(taskList, queueMutex, stop);
         }
         else if (auto* psAlgo = dynamic_cast<PriorityScheduling*>(schedulingAlgorithm.get()))
         {
-            psAlgo->schedule(priorityQueue, queueMutex, cv, stop);
+            psAlgo->schedule(taskList, queueMutex, stop);
         }
     }
 }

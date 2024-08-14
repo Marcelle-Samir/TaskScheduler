@@ -18,7 +18,6 @@ class Task
 public:
     int id;
     int priority;
-    std::promise<void> startPromise;
     std::unique_ptr<std::thread> threadPtr;
     std::chrono::system_clock::time_point execution_time;
     std::function<void()> action;
@@ -29,17 +28,9 @@ public:
         totalDuration(dur), remainingTime(dur), isTaskComplete(std::make_shared<std::atomic<bool>>(false))
         {
         std::cout << __FUNCTION__ << " is Called." << std::endl;
+
         static int taskCounter = 0;
         id = taskCounter++;
-        threadPtr = std::make_unique<std::thread>([this, action]() mutable
-        {
-            while (true) {
-                startPromise.get_future().wait();
-                action();
-                *isTaskComplete = true;
-                resetPromise();
-            }
-        });
     }
 
     Task(Task&& other) noexcept
@@ -48,7 +39,6 @@ public:
           action(std::move(other.action)),
           execution_time(std::move(other.execution_time)),
           duration(other.duration),
-          startPromise(std::move(other.startPromise)),
           threadPtr(std::move(other.threadPtr)),
           isTaskComplete(std::move(other.isTaskComplete))
           {
@@ -63,7 +53,6 @@ public:
             action = other.action;
             execution_time = other.execution_time;
             duration = other.duration;
-            startPromise = std::move(other.startPromise);
             threadPtr = std::move(other.threadPtr);
             isTaskComplete = std::move(other.isTaskComplete);
         }
@@ -84,7 +73,7 @@ public:
     void end()
     {
         std::cout << __FUNCTION__ << " is Called." << std::endl;
-        if (!isTaskComplete)
+        if (isTaskComplete)
         {
             std::cout << "Task completed successfully.\n";
         }
@@ -93,10 +82,7 @@ public:
     void start()
     {
         std::cout << __FUNCTION__ << " is Called." << std::endl;
-        startPromise.set_value();
-        std::this_thread::sleep_for(std::chrono::milliseconds(totalDuration));
-        *isTaskComplete = true;
-        end();
+        action();
     }
 
     int getDuration() const
@@ -114,6 +100,7 @@ public:
     void runFor(int timeSlice)
     {
         std::cout << __FUNCTION__ << " is Called." << std::endl;
+        fflush(NULL);
         if (remainingTime > 0)
         {
             int timeToRun = std::min(timeSlice, remainingTime);
@@ -139,10 +126,6 @@ private:
     int remainingTime;
     int Taskpriority;
     std::shared_ptr<std::atomic<bool>> isTaskComplete;
-    void resetPromise()
-    {
-        startPromise = std::promise<void>();  // Reset the promise for the next execution
-    }
 };
 
 #endif //TASK_H
