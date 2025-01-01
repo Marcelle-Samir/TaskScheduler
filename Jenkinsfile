@@ -16,7 +16,7 @@ pipeline {
         stage('Test') {
             steps {
                 // Run Google Tests and generate results in XML format
-                sh './tests --gtest_output=xml:test-results.xml'
+                sh './build/HitachiScheduler_test --gtest_output=xml:test-results.xml'
             }
         }
     }
