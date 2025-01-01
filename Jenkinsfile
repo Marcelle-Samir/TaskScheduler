@@ -17,7 +17,6 @@ pipeline {
             steps {
                 // Run Google Tests and generate results in XML format
                 sh 'pwd'
-                sh 'ls -la ./build'
                 sh 'find . -name HitachiScheduler_test'
                 sh './build/HitachiScheduler_test --gtest_output=xml:test-results.xml'
             }
