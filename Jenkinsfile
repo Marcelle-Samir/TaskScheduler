@@ -3,20 +3,20 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Clone your GitHub repository
+                // Checkout source code from GitHub
                 checkout scm
             }
         }
         stage('Build') {
             steps {
-                // Use a script to build your C++ code
-                sh 'g++ -o outputfile src/*.cpp'
+                // Use CMake to build your C++ project
+                sh 'cmake . && make'
             }
         }
         stage('Test') {
             steps {
-                // Run Google Tests
-                sh './outputfile --gtest_output=xml:test-results.xml'
+                // Run Google Tests and generate results in XML format
+                sh './tests --gtest_output=xml:test-results.xml'
             }
         }
     }
